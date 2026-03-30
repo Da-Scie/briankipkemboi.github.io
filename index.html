@@ -404,8 +404,7 @@ nav {
   padding: 0.4rem 0.9rem;
   border-radius: 100px;
   margin-bottom: 1.5rem;
-  opacity: 0;
-  animation: fadeUp 0.7s var(--ease-out) forwards 0.1s;
+  animation: fadeUp 0.7s var(--ease-out) both 0.1s;
 }
 
 .hero-badge .pulse {
@@ -423,8 +422,7 @@ nav {
   line-height: 1.08;
   letter-spacing: -0.035em;
   margin-bottom: 1rem;
-  opacity: 0;
-  animation: fadeUp 0.7s var(--ease-out) forwards 0.25s;
+  animation: fadeUp 0.7s var(--ease-out) both 0.25s;
 }
 
 .hero h1 .line-accent {
@@ -440,8 +438,7 @@ nav {
   font-weight: 500;
   color: var(--text-secondary);
   margin-bottom: 1.25rem;
-  opacity: 0;
-  animation: fadeUp 0.7s var(--ease-out) forwards 0.4s;
+  animation: fadeUp 0.7s var(--ease-out) both 0.4s;
 }
 
 .hero-intro {
@@ -451,16 +448,14 @@ nav {
   line-height: 1.85;
   max-width: 520px;
   margin-bottom: 2.5rem;
-  opacity: 0;
-  animation: fadeUp 0.7s var(--ease-out) forwards 0.55s;
+  animation: fadeUp 0.7s var(--ease-out) both 0.55s;
 }
 
 .hero-cta {
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
-  opacity: 0;
-  animation: fadeUp 0.7s var(--ease-out) forwards 0.7s;
+  animation: fadeUp 0.7s var(--ease-out) both 0.7s;
 }
 
 /* Hero visual — abstract data chart */
@@ -469,8 +464,7 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 0;
-  animation: fadeUp 0.9s var(--ease-out) forwards 0.5s;
+  animation: fadeUp 0.9s var(--ease-out) both 0.5s;
 }
 
 .hero-graphic {
@@ -1063,8 +1057,13 @@ footer .footer-meta {
 
 .reveal {
   opacity: 1;
-  transform: translateY(28px);
+  transform: translateY(0);
   transition: opacity 0.75s var(--ease-out), transform 0.75s var(--ease-out);
+}
+
+.reveal.hidden {
+  opacity: 0;
+  transform: translateY(28px);
 }
 
 .reveal.visible {
@@ -1534,7 +1533,7 @@ footer .footer-meta {
     </div>
 
     <div class="contact-cta reveal">
-      <a href="/cdn-cgi/l/email-protection#7c1e0e151d1217150c1719111e1315494e3c1b111d1510521f1311" class="btn btn-primary">✉ Send Email</a>
+      <a href="mailto:briankipkemboi52@gmail.com" class="btn btn-primary">✉ Send Email</a>
       <a href="#" class="btn btn-warm">↓ Download Resume</a>
       <a href="https://www.linkedin.com/in/brian-kipkemboi-919293325" class="btn btn-outline" target="_blank">LinkedIn Profile</a>
       <a href="https://github.com/Da-Scie" class="btn btn-outline" target="_blank">GitHub</a>
@@ -1547,7 +1546,7 @@ footer .footer-meta {
       </div>
       <div class="contact-item">
         <div class="ci-icon">📧</div>
-        <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5537273c343b3e3c253e3038373a3c6067153238343c397b363a38">[email&#160;protected]</a>
+        briankipkemboi52@gmail.com
       </div>
       <div class="contact-item">
         <div class="ci-icon">📱</div>
@@ -1564,7 +1563,7 @@ footer .footer-meta {
 </footer>
 
 <!-- ═══ SCRIPTS ═══ -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // Theme toggle
 const html = document.documentElement;
 const toggle = document.getElementById('themeToggle');
@@ -1593,17 +1592,23 @@ document.querySelectorAll('.nav-links a').forEach(a => {
   a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
 });
 
-// Scroll reveal
+// Scroll reveal — content visible by default, JS adds animation
+const revealEls = document.querySelectorAll('.reveal');
+revealEls.forEach(el => el.classList.add('hidden'));
+
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry, i) => {
     if (entry.isIntersecting) {
-      setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      setTimeout(() => {
+        entry.target.classList.remove('hidden');
+        entry.target.classList.add('visible');
+      }, i * 60);
       revealObserver.unobserve(entry.target);
     }
   });
 }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
 
-document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+revealEls.forEach(el => revealObserver.observe(el));
 
 // Active nav
 const sections = document.querySelectorAll('section[id]');
@@ -1613,3 +1618,16 @@ window.addEventListener('scroll', () => {
   let current = '';
   sections.forEach(sec => {
     if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+  });
+  navLinks.forEach(link => {
+    link.style.color = '';
+    link.style.background = '';
+    if (link.getAttribute('href') === '#' + current) {
+      link.style.color = 'var(--accent)';
+      link.style.background = 'var(--accent-wash)';
+    }
+  });
+});
+</script>
+</body>
+</html>
